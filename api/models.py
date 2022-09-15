@@ -26,8 +26,8 @@ class Account(models.Model):
     email = models.CharField(verbose_name='이메일', max_length=255)
     created_at = models.DateTimeField(verbose_name='생성일시', auto_now_add=True)
 
-    access_token = models.ForeignKey(AccessToken, on_delete=models.CASCADE)
-    credential = models.ForeignKey(Credential, on_delete=models.CASCADE)
+    access_token = models.ForeignKey(AccessToken, on_delete=models.CASCADE, null=True)
+    credential = models.ForeignKey(Credential, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         return self.name
