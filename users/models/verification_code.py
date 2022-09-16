@@ -1,7 +1,9 @@
 from django.db import models
 
+
 class VerificationCodeQuerySet(models.QuerySet):
     pass
+
 
 class VerificationCode(models.Model):
     phone = models.CharField(max_length=64)

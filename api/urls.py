@@ -1,7 +1,5 @@
-from django.urls import path, include
+from django.urls import include, path
 
 app_name = "api"
 
-urlpatterns = [
-    path("users/", include('api.users.urls'))
-]
+urlpatterns = [path("users/", include('api.users.urls'))]

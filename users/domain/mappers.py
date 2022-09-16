@@ -1,9 +1,10 @@
-from typing import Text,Any,Optional,Dict
+from typing import Any, Dict, Optional, Text
 
 from dacite import from_dict
 
 from users.domain.aggregate.verification_code.entities import VerificationCodeEntity
 from users.models import VerificationCode
+
 
 class VerificationCodeMapper:
     @staticmethod
@@ -14,7 +15,7 @@ class VerificationCodeMapper:
                 phone=from_obj.phone,
                 code=from_obj.phone,
                 verifies_at=from_obj.verifies_at,
-                expires_at=from_obj.expires_at
+                expires_at=from_obj.expires_at,
             )
 
         return from_dict(
