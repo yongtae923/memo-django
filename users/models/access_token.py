@@ -1,5 +1,6 @@
 from django.db import models
 
+
 class AccessToken(models.Model):
     token = models.CharField(max_length=512)
     refresh_token = models.CharField(max_length=512)

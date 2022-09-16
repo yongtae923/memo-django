@@ -1,10 +1,12 @@
 from datetime import datetime
 from typing import List
 
-from users.application.dtos.auth import PhoneNumberRequestDTO,VerifyCodeDTO
+from users.application.dtos.auth import PhoneNumberRequestDTO, VerifyCodeDTO
 from users.domain.aggregate.verification_code.entities import VerificationCodeEntity
-from users.domain.aggregate.verification_code.repositories import VerificationCodeRepository, \
-    provide_verification_code_repository
+from users.domain.aggregate.verification_code.repositories import (
+    VerificationCodeRepository,
+    provide_verification_code_repository,
+)
 
 
 def generate_code():
@@ -21,10 +23,10 @@ def generate_code():
 
 
 class AuthService:
-    def __init__(self,verification_code_repository:VerificationCodeRepository):
+    def __init__(self, verification_code_repository: VerificationCodeRepository):
         self.verification_code_repository = verification_code_repository
 
-    def request_verification_code(self,phone_number_request_dto: PhoneNumberRequestDTO)->VerificationCodeEntity:
+    def request_verification_code(self, phone_number_request_dto: PhoneNumberRequestDTO) -> VerificationCodeEntity:
         """
         public async Task<StatusResponse> RequestVerificationCodeAsync(PhoneNumberRequestModel model)
         {
@@ -43,17 +45,19 @@ class AuthService:
         """
 
         phone_string = phone_number_request_dto.validated_data['phone']
-        code_entity:VerificationCodeEntity= VerificationCodeEntity(phone=phone_string)
+        code_entity: VerificationCodeEntity = VerificationCodeEntity(phone=phone_string)
         self.verification_code_repository.save(code_entity)
         return code_entity
 
-    def verify_code(self,dto:VerifyCodeDTO):
+    def verify_code(self, dto: VerifyCodeDTO):
         """
          var matchedCodes = _database.VerificationCodes.Where(code =>
             code.Code == verifyingCode && code.Phone == ParseToFormat(phoneString));
         if (!matchedCodes.Any()) return new StatusResponse(StatusType.NotFound);
         """
-        entity_list:List[VerificationCodeEntity]= self.verification_code_repository.find_codes_by_phone_and_code(code=dto.validated_data['code'],phone=dto.validated_data['phone'])
+        entity_list: List[VerificationCodeEntity] = self.verification_code_repository.find_codes_by_phone_and_code(
+            code=dto.validated_data['code'], phone=dto.validated_data['phone']
+        )
         if not entity_list:
             """
             인즈
@@ -67,11 +71,6 @@ class AuthService:
             raise Exception
 
 
-
-
-
 def provide_auth_service():
-    verification_code_repository=provide_verification_code_repository()
+    verification_code_repository = provide_verification_code_repository()
     return AuthService(verification_code_repository=verification_code_repository)
-
-
