@@ -51,6 +51,17 @@ optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 
 [[package]]
+name = "dacite"
+version = "1.6.0"
+description = "Simple creation of data classes from dictionaries."
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[package.extras]
+dev = ["pylint", "mypy", "black", "coveralls", "pytest-cov", "pytest (>=5)"]
+
+[[package]]
 name = "django"
 version = "3.2"
 description = "A high-level Python Web framework that encourages rapid development and clean, pragmatic design."
@@ -155,13 +166,14 @@ python-versions = ">=3.7"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "2f8813d59792208f6ab26717c728010c515d4f2507dee7d5b4e57a6d3cfc376e"
+content-hash = "6a3b9416880f19602317039643d76265930595a85b4abe1dda65d297255ac3bd"
 
 [metadata.files]
 asgiref = []
 black = []
 click = []
 colorama = []
+dacite = []
 django = []
 djangorestframework = []
 isort = []
