@@ -6,8 +6,8 @@ app_name = "users"
 
 router = routers.DefaultRouter()
 
-router.register(r"", UsersViewSet, basename="root")
-router.register(r"auth", AuthsViewSet, basename="root")
+router.register(r"user", UserViewSet, basename="root")
+router.register(r"auth", AuthViewSet, basename="root")
 
 urlpatterns = []
 

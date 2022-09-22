@@ -2,7 +2,7 @@ from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from users.application.dtos.auth import PhoneNumberRequestDTO, VerifyCodeDTO
+from users.application.dtos.auth import LoginDTO, PhoneNumberRequestDTO, RegisterDTO, VerifyCodeDTO
 from users.application.services.auth import provide_auth_service
 from users.domain.aggregate.verification_code.entities import VerificationCodeEntity
 
@@ -70,5 +70,21 @@ class AuthViewSet(viewsets.GenericViewSet):
         dto = VerifyCodeDTO(data=request.data)
         dto.is_valid(raise_exception=True)
         provide_auth_service().verify_code(dto)
+
+        return Response(status=status.HTTP_200_OK)
+
+    @action(detail=False, url_path='register')
+    def register(self, request):
+        dto = RegisterDTO(data=request.data)
+        dto.is_valid(raise_exception=True)
+        provide_auth_service().register(dto)
+
+        return Response(status=status.HTTP_200_OK)
+
+    @action(detail=False, url_path='login')
+    def login(self, request):
+        dto = LoginDTO(data=request.data)
+        dto.is_valid(raise_exception=True)
+        provide_auth_service().login(dto)
 
         return Response(status=status.HTTP_200_OK)
