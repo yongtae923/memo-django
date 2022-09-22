@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import List, Text
 
 from users.domain.aggregate.verification_code.entities import VerificationCodeEntity
@@ -15,4 +16,15 @@ class ORMVerificationCodeRepository(VerificationCodeRepository):
 
     def find_codes_by_phone_and_code(self, phone: Text, code: Text) -> List[VerificationCodeEntity]:
         code_objs: VerificationCodeQuerySet = VerificationCode.objects.filter(phone=phone, code=code)
+        return [VerificationCodeMapper.to_entity(code_obj) for code_obj in code_objs]
+
+    def find_active_codes(self, phone: Text):
+        code_objs: VerificationCodeQuerySet = VerificationCode.objects.filter(
+            phone=phone, verifies_at__gt=datetime.now(), expires_at__lt=datetime.now()
+        )
+        return [VerificationCodeMapper.to_entity(code_obj) for code_obj in code_objs]
+
+    def expire_active_codes(self, phone: Text):
+        code_objs: VerificationCodeQuerySet = VerificationCode.objects.filter(phone=phone)
+        code_objs.update(expires_at=datetime.now())
         return [VerificationCodeMapper.to_entity(code_obj) for code_obj in code_objs]

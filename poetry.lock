@@ -163,10 +163,18 @@ category = "main"
 optional = false
 python-versions = ">=3.7"
 
+[[package]]
+name = "ulid"
+version = "1.1"
+description = "Pyhton version of this: https://github.com/alizain/ulid"
+category = "main"
+optional = false
+python-versions = "*"
+
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "6a3b9416880f19602317039643d76265930595a85b4abe1dda65d297255ac3bd"
+content-hash = "8be4f3e3b1cfb7951de830170e05edb6ab70f7e72f0839bdfc557c92964d6a72"
 
 [metadata.files]
 asgiref = []
@@ -184,3 +192,4 @@ pytz = []
 sqlparse = []
 tomli = []
 typing-extensions = []
+ulid = []
