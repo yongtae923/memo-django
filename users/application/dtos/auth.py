@@ -1,9 +1,7 @@
-from abc import ABC
-
 from rest_framework import serializers
 
 
-class PhoneNumberRequestDTO(serializers.Serializer, ABC):
+class PhoneNumberRequestDTO(serializers.Serializer):
     """
     public class PhoneNumberRequestModel
     {
@@ -16,12 +14,12 @@ class PhoneNumberRequestDTO(serializers.Serializer, ABC):
     phone = serializers.CharField()
 
 
-class VerifyCodeDTO(serializers.Serializer, ABC):
+class VerifyCodeDTO(serializers.Serializer):
     code = serializers.CharField()
-    phone = serializers.CharField()
+    context_key = serializers.CharField()
 
 
-class RegisterDTO(serializers.Serializer, ABC):
+class RegisterDTO(serializers.Serializer):
     """
     [DataType(DataType.EmailAddress)]
     public string Email { get; set; }
@@ -41,8 +39,9 @@ class RegisterDTO(serializers.Serializer, ABC):
     name = serializers.CharField()
     nickname = serializers.CharField()
     phone = serializers.CharField()
+    context_key = serializers.CharField()
 
 
-class LoginDTO(serializers.Serializer, ABC):
+class LoginDTO(serializers.Serializer):
     id = serializers.CharField()
     password = serializers.CharField()

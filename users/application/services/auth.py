@@ -3,6 +3,7 @@ from typing import List
 
 from django.utils.crypto import get_random_string
 
+from users.models import VerificationCode
 from users.application.dtos.auth import LoginDTO, PhoneNumberRequestDTO, RegisterDTO, VerifyCodeDTO
 from users.domain.aggregate.account.entities import AccessTokenEntity, AccountEntity
 from users.domain.aggregate.account.repositories import AccountRepository, provide_account_repository
@@ -60,20 +61,17 @@ class AuthService:
             code.Code == verifyingCode && code.Phone == ParseToFormat(phoneString));
         if (!matchedCodes.Any()) return new StatusResponse(StatusType.NotFound);
         """
-        entity_list: List[VerificationCodeEntity] = self.verification_code_repository.find_codes_by_phone_and_code(
-            code=dto.validated_data['code'], phone=dto.validated_data['phone']
-        )
-        if not entity_list:
-            """
-            인즈
-            """
-            raise Exception
+        try:
+            entity: VerificationCodeEntity = self.verification_code_repository.find_codes_by_phone_and_code(
+                code=dto.validated_data['code'],context_key=dto.validated_data['context_key']
+            )
+        except VerificationCode.DoesNotExists:
+            raise Exception('empty')
 
-        if any([entity.expires_at > datetime.now() for entity in entity_list]):
-            """
-            만ㄹ
-            """
-            raise Exception
+        entity.verify()
+
+        self.verification_code_repository.bulk_update([entity], ('verifies_at',))
+
 
     def register(self, dto: RegisterDTO):
         """
@@ -99,9 +97,10 @@ class AuthService:
         // 엑세스토큰을 반환합니다.
         return new StatusResponse(StatusType.Success, new AccessTokenResponse(accessToken));
         """
-        valid_codes = self.verification_code_repository.find_active_codes(phone=dto.validated_data['phone'])
-        if not valid_codes:
-            raise Exception
+        try:
+            valid_code:List[VerificationCodeEntity] = self.verification_code_repository.find_active_codes(context_key=dto.validated_data['context_key'])
+        except VerificationCode.DoesNotExists:
+            raise Exception('empty')
 
         self.verification_code_repository.expire_active_codes(phone=dto.validated_data['phone'])
 

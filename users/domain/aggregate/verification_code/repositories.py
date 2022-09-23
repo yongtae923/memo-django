@@ -1,5 +1,5 @@
 from abc import ABC
-from typing import Text
+from typing import Text,List
 
 from users.domain.aggregate.verification_code.entities import VerificationCodeEntity
 
@@ -9,13 +9,16 @@ class VerificationCodeRepository(ABC):
         """ """
         pass
 
-    def find_codes_by_phone_and_code(self, phone: Text, code: Text):
+    def find_codes_by_phone_and_code(self, code: Text, context_key: Text):
         pass
 
-    def find_active_codes(self, phone: Text):
+    def find_active_codes(self, context_key: Text):
         pass
 
     def expire_active_codes(self, phone: Text):
+        pass
+
+    def bulk_update(self,entity_list:List[VerificationCodeEntity],fields:tuple):
         pass
 
 
