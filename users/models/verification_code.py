@@ -10,6 +10,8 @@ class VerificationCode(models.Model):
     code = models.CharField(max_length=8)
     verifies_at = models.DateTimeField(null=True)
     expires_at = models.DateTimeField()
+    context_key = models.CharField(max_length=128)
+    use_at = models.DateTimeField()
 
     objects = VerificationCodeQuerySet.as_manager()
 

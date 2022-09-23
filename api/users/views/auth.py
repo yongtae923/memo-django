@@ -12,48 +12,6 @@ class AuthViewSet(viewsets.GenericViewSet):
     api/users/auth/
     """
 
-    def list(self, request):
-        """
-        GET
-        :return:
-        """
-        pass
-
-    def create(self, request):
-        """
-        POST
-        :return:
-        """
-        pass
-
-    def retrieve(self, request, sno):
-        """
-        GET {lookup}
-        :return:
-        """
-        pass
-
-    def update(self, request, sno):
-        """
-        PUT {lookup}
-        :return:
-        """
-        pass
-
-    def partial_update(self, request):
-        """
-        PATCH {lookup}
-        :return:
-        """
-        pass
-
-    def destroy(self):
-        """
-        DELETE {lookup}
-        :return:
-        """
-        pass
-
     @action(detail=False)
     def codes(self, request):
         """
@@ -63,7 +21,7 @@ class AuthViewSet(viewsets.GenericViewSet):
         dto.is_valid(raise_exception=True)
         entity: VerificationCodeEntity = provide_auth_service().request_verification_code(dto)
 
-        return Response(dict(code=entity.code), status=status.HTTP_200_OK)
+        return Response(dict(code=entity.code, context_key=entity.context_key), status=status.HTTP_200_OK)
 
     @action(detail=False, url_path='codes/verify')
     def codes_verify(self, request):
