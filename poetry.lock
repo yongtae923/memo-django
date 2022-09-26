@@ -101,6 +101,17 @@ python-versions = ">=3.5"
 django = ">=1.11"
 
 [[package]]
+name = "djangorestframework-jwt"
+version = "1.11.0"
+description = "JSON Web Token based authentication for Django REST framework"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+PyJWT = ">=1.5.2,<2.0.0"
+
+[[package]]
 name = "isort"
 version = "5.10.1"
 description = "A Python utility / library to sort Python imports."
@@ -149,6 +160,19 @@ python-versions = ">=3.7"
 [package.extras]
 docs = ["furo (>=2021.7.5b38)", "proselint (>=0.10.2)", "sphinx-autodoc-typehints (>=1.12)", "sphinx (>=4)"]
 test = ["appdirs (==1.4.4)", "pytest-cov (>=2.7)", "pytest-mock (>=3.6)", "pytest (>=6)"]
+
+[[package]]
+name = "pyjwt"
+version = "1.7.1"
+description = "JSON Web Token implementation in Python"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.extras]
+crypto = ["cryptography (>=1.4)"]
+flake8 = ["flake8", "flake8-import-order", "pep8-naming"]
+test = ["pytest (>=4.0.1,<5.0.0)", "pytest-cov (>=2.6.0,<3.0.0)", "pytest-runner (>=4.2,<5.0.0)"]
 
 [[package]]
 name = "pytz"
@@ -207,7 +231,7 @@ watchdog = ["watchdog"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "ee3d3dc60821c57c8e422b375add737e7c9f943f5977aed443d9da103bbc60b4"
+content-hash = "dc88ceafe72bb8a9788f7d3ca0ee57d4f80584588eeba4745d466f341ae294e6"
 
 [metadata.files]
 asgiref = []
@@ -218,11 +242,13 @@ dacite = []
 django = []
 django-extensions = []
 djangorestframework = []
+djangorestframework-jwt = []
 isort = []
 markupsafe = []
 mypy-extensions = []
 pathspec = []
 platformdirs = []
+pyjwt = []
 pytz = []
 sqlparse = []
 tomli = []

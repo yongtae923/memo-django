@@ -35,9 +35,9 @@ class AuthViewSet(viewsets.GenericViewSet):
     def register(self, request):
         dto = RegisterDTO(data=request.data)
         dto.is_valid(raise_exception=True)
-        provide_auth_service().register(dto)
+        access_token: bytes = provide_auth_service().register(dto)
 
-        return Response(status=status.HTTP_200_OK)
+        return Response(data=access_token, status=status.HTTP_200_OK)
 
     @action(detail=False, url_path='login')
     def login(self, request):

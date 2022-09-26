@@ -1,9 +1,10 @@
 from datetime import datetime, timedelta
 from typing import List
 
+import jwt
+from django.conf import settings
 from django.utils.crypto import get_random_string
 
-from users.models import VerificationCode
 from users.application.dtos.auth import LoginDTO, PhoneNumberRequestDTO, RegisterDTO, VerifyCodeDTO
 from users.domain.aggregate.account.entities import AccessTokenEntity, AccountEntity
 from users.domain.aggregate.account.repositories import AccountRepository, provide_account_repository
@@ -12,6 +13,7 @@ from users.domain.aggregate.verification_code.repositories import (
     VerificationCodeRepository,
     provide_verification_code_repository,
 )
+from users.models import VerificationCode
 
 
 def generate_code():
@@ -63,7 +65,7 @@ class AuthService:
         """
         try:
             entity: VerificationCodeEntity = self.verification_code_repository.find_codes_by_phone_and_code(
-                code=dto.validated_data['code'],context_key=dto.validated_data['context_key']
+                code=dto.validated_data['code'], context_key=dto.validated_data['context_key']
             )
         except VerificationCode.DoesNotExists:
             raise Exception('empty')
@@ -72,8 +74,7 @@ class AuthService:
 
         self.verification_code_repository.bulk_update([entity], ('verifies_at',))
 
-
-    def register(self, dto: RegisterDTO):
+    def register(self, dto: RegisterDTO) -> bytes:
         """
 
         // 만료되지 않고 활성화 되어있는 인증코드를 찾습니다.
@@ -98,7 +99,9 @@ class AuthService:
         return new StatusResponse(StatusType.Success, new AccessTokenResponse(accessToken));
         """
         try:
-            valid_code:List[VerificationCodeEntity] = self.verification_code_repository.find_active_codes(context_key=dto.validated_data['context_key'])
+            valid_code: List[VerificationCodeEntity] = self.verification_code_repository.find_active_codes(
+                context_key=dto.validated_data['context_key']
+            )
         except VerificationCode.DoesNotExists:
             raise Exception('empty')
 
@@ -107,8 +110,21 @@ class AuthService:
         account_entity: AccountEntity = AccountEntity(
             name=dto.name, nickname=dto.nickname, phone=dto.phone, email=dto.email
         )
+        payload = {
+            "name": account_entity.name,
+            "nickname": account_entity.nickname,
+            "phone": account_entity.phone,
+            "email": account_entity.email,
+            "exp": timedelta(hours=2),
+            "iat": datetime.utcnow(),
+        }
+        access_token: bytes = jwt.encode(
+            payload=payload, key=settings("JWT_SECRET_KEY"), algorithm=settings("JWT_ALGORITHM")
+        )
 
         self.account_repository.save(account_entity)
+
+        return access_token
 
     def login(self, dto: LoginDTO):
         if self.is_email(dto.id):
@@ -132,11 +148,11 @@ class AuthService:
 
     def is_email(self, text: str) -> bool:
         # 이메일인지 확인
-        pass
+        return True
 
     def is_phone(self, text: str) -> bool:
         # 전화번호인지 확인
-        pass
+        return True
 
 
 def provide_auth_service():
